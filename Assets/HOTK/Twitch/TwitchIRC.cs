@@ -145,7 +145,7 @@ public class TwitchIRC : MonoBehaviour
                         }
                         else if (key.StartsWith("system-msg="))
                         {
-                            sysMessage = key.Substring(11);
+                            sysMessage = key.Substring(11).Replace("\s", " ");
                         }
                     }
 
