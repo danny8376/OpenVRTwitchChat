@@ -59,7 +59,7 @@ public class TwitchChatTester : MonoBehaviour
 
     private readonly List<TwitchChat> _userChat = new List<TwitchChat>(); // Used to store the currect messages on the Chat Display
 
-    private readonly Dictionary<int, Material> _emoteMap = new Dictionary<int, Material>(); // Used temporarily to store the currect emotes on a given line
+    private readonly Dictionary<string, Material> _emoteMap = new Dictionary<string, Material>(); // Used temporarily to store the currect emotes on a given line
 
     private readonly Stopwatch _messageSoundStopwatch = new Stopwatch(); // Used to prevent message sound spamming
     private readonly Stopwatch _newFollowerSoundStopwatch = new Stopwatch(); // Used to prevent message sound spamming
@@ -819,9 +819,9 @@ public class TwitchChatTester : MonoBehaviour
     public struct TwitchChatUpdate
     {
         public readonly TwitchChat[] Messages;
-        public readonly int[] EmoteIds;
+        public readonly string[] EmoteIds;
 
-        public TwitchChatUpdate(TwitchChat[] messages, int[] emoteIds)
+        public TwitchChatUpdate(TwitchChat[] messages, string[] emoteIds)
         {
             Messages = messages;
             EmoteIds = emoteIds;
@@ -832,10 +832,10 @@ public class TwitchChatTester : MonoBehaviour
     public struct MaterialIndexPair
     {
         public readonly int Index;
-        public readonly int EmoteId;
+        public readonly string EmoteId;
         public readonly Material Material;
 
-        public MaterialIndexPair(int index, int emoteId, Material material)
+        public MaterialIndexPair(int index, string emoteId, Material material)
         {
             Index = index;
             EmoteId = emoteId;

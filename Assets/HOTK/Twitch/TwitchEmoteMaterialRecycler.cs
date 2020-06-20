@@ -81,10 +81,10 @@ public class TwitchEmoteMaterialRecycler : MonoBehaviour
 
     public struct EmoteMaterial
     {
-        public readonly int Id;
+        public readonly string Id;
         public readonly Material Material;
 
-        public EmoteMaterial(int id, Material material)
+        public EmoteMaterial(string id, Material material)
         {
             Id = id;
             Material = material;

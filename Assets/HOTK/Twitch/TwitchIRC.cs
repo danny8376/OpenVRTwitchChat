@@ -134,7 +134,7 @@ public class TwitchIRC : MonoBehaviour
                         else if (key.StartsWith("emotes="))
                         {
                             var emotes = key.Substring(7).Split('/');
-                            emoteKeys.AddRange(from emote in emotes let emoteSplit = emote.IndexOf(":") where emoteSplit != -1 let emoteId = int.Parse(emote.Substring(0, emoteSplit)) let emotePos = emote.Substring(emoteSplit + 1) let emotePoses = emotePos.Split(',') from emoteP in emotePoses let emoteTokens = emoteP.Split('-') let emoteStart = int.Parse(emoteTokens[0]) let emoteLen = (int.Parse(emoteTokens[1]) - emoteStart) + 1 select new EmoteKey(emoteId, emoteStart, emoteLen)); // LINQ master :P
+                            emoteKeys.AddRange(from emote in emotes let emoteSplit = emote.IndexOf(":") where emoteSplit != -1 let emoteId = emote.Substring(0, emoteSplit) let emotePos = emote.Substring(emoteSplit + 1) let emotePoses = emotePos.Split(',') from emoteP in emotePoses let emoteTokens = emoteP.Split('-') let emoteStart = int.Parse(emoteTokens[0]) let emoteLen = (int.Parse(emoteTokens[1]) - emoteStart) + 1 select new EmoteKey(emoteId, emoteStart, emoteLen)); // LINQ master :P
                         }
                     }
 
@@ -381,11 +381,11 @@ public class TwitchIRC : MonoBehaviour
 
     public class EmoteKey
     {
-        public readonly int EmoteId;
+        public readonly string EmoteId;
         public int EmoteStart;
         public int EmoteLength;
 
-        public EmoteKey(int id, int start, int length)
+        public EmoteKey(string id, int start, int length)
         {
             EmoteId = id;
             EmoteStart = start;
