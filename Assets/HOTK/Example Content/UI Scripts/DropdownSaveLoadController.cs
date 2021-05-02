@@ -10,8 +10,10 @@ public class DropdownSaveLoadController : MonoBehaviour
     public HOTK_Overlay OverlayToSave;
 
     public InputField UsernameField;
+    public InputField TokenField;
     public InputField ChannelField;
     public Material BackgroundMaterial;
+    public Dropdown SaveTokenDropdown;
 
     public OffsetMatchSlider XSlider;
     public OffsetMatchSlider YSlider;
@@ -143,6 +145,9 @@ public class DropdownSaveLoadController : MonoBehaviour
         if (!TwitchChatTester.Instance.Connected) UsernameField.text = settings.Username;
         if (!TwitchChatTester.Instance.Connected) ChannelField.text = settings.Channel;
 
+        if (!TwitchChatTester.Instance.Connected) TokenField.text = (string.IsNullOrEmpty(settings.Token) ? "" : settings.Token);
+        SaveTokenDropdown.value = string.IsNullOrEmpty(settings.Token) ? 0 : 1;
+
         XSlider.Slider.value = settings.X;
         YSlider.Slider.value = settings.Y;
         ZSlider.Slider.value = settings.Z;
@@ -253,6 +258,7 @@ public class DropdownSaveLoadController : MonoBehaviour
             settings.SaveFileVersion = TwitchSettings.CurrentSaveVersion;
 
             settings.Username = UsernameField.text;
+            settings.Token = (SaveTokenDropdown.value == 1 ? TokenField.text : "");
             settings.Channel = ChannelField.text;
             settings.X = OverlayToSave.AnchorOffset.x; settings.Y = OverlayToSave.AnchorOffset.y; settings.Z = OverlayToSave.AnchorOffset.z;
             settings.RX = OverlayToSave.transform.eulerAngles.x; settings.RY = OverlayToSave.transform.eulerAngles.y; settings.RZ = OverlayToSave.transform.eulerAngles.z;
@@ -303,11 +309,13 @@ public class DropdownSaveLoadController : MonoBehaviour
     private TwitchSettings ConvertToTwitchSettings(HOTK_Overlay o) // Create a new save state
     {
         var backgroundColor = GetMaterialTexture().GetPixel(0, 0);
+
         return new TwitchSettings()
         {
             SaveFileVersion = TwitchSettings.CurrentSaveVersion,
 
             Username = UsernameField.text,
+            Token = (SaveTokenDropdown.value == 1 ? TokenField.text : ""),
             Channel = ChannelField.text,
             X = o.AnchorOffset.x,
             Y = o.AnchorOffset.y,

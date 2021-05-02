@@ -14,11 +14,12 @@ public class ProgramSettings
 [System.Serializable]
 public class TwitchSettings
 {
-    public const uint CurrentSaveVersion = 4;
+    public const uint CurrentSaveVersion = 5;
 
     public uint SaveFileVersion;
 
     public string Username;
+    public string Token;
     public string Channel;
     public float X, Y, Z;
     public float RX, RY, RZ;
