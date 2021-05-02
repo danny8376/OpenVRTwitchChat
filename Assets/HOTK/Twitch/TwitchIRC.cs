@@ -98,6 +98,7 @@ public class TwitchIRC : MonoBehaviour
 
                 string[] tokens;
                 string message;
+                string sysMessage = null;
                 List<EmoteKey> emoteKeys = null;
                 if (_buffer.StartsWith("@"))
                 {
@@ -136,6 +137,10 @@ public class TwitchIRC : MonoBehaviour
                             var emotes = key.Substring(7).Split('/');
                             emoteKeys.AddRange(from emote in emotes let emoteSplit = emote.IndexOf(":") where emoteSplit != -1 let emoteId = emote.Substring(0, emoteSplit) let emotePos = emote.Substring(emoteSplit + 1) let emotePoses = emotePos.Split(',') from emoteP in emotePoses let emoteTokens = emoteP.Split('-') let emoteStart = int.Parse(emoteTokens[0]) let emoteLen = (int.Parse(emoteTokens[1]) - emoteStart) + 1 select new EmoteKey(emoteId, emoteStart, emoteLen)); // LINQ master :P
                         }
+                        else if (key.StartsWith("system-msg="))
+                        {
+                            sysMessage = key.Substring(11).Replace("\\s", " ");
+                        }
                     }
 
                     emoteKeys.Sort((a, b) => a.EmoteStart.CompareTo(b.EmoteStart));
@@ -172,6 +177,13 @@ public class TwitchIRC : MonoBehaviour
                         lock (_recievedMsgs)
                         {
                             _recievedMsgs.Add(new TwitchMessage(message, emoteKeys));
+                        }
+                        break;
+                    case "USERNOTICE": // Subscriber/raid notifications
+                        lock (_recievedMsgs)
+                        {
+                            _recievedMsgs.Add(new TwitchMessage(ToTwitchNotice(sysMessage)));
+                            //_recievedMsgs.Add(new TwitchMessage(message, emoteKeys)); // Not sure if this will display the correct message or username if a message is included with the subscription, subscriber username is available in the "login" tag https://dev.twitch.tv/docs/irc/tags#usernotice-twitch-tags
                         }
                         break;
                     case "JOIN":
